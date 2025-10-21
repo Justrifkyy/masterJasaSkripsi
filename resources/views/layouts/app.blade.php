@@ -27,7 +27,7 @@
                 </header>
             @endif
 
-            <main class="py-12">
+            <main>
                 {{ $slot }}
             </main>
             @include('layouts.footer')
