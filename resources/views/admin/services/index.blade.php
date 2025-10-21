@@ -21,6 +21,12 @@
                         </div>
                     @endif
 
+                    @if (session('error'))
+                        <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
@@ -43,14 +49,27 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900">Rp {{ number_format($service->harga, 0, ',', '.') }}</div>
                                         </td>
+                                        
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $service->is_favorite ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
-                                                {{ $service->is_favorite ? 'Ya' : 'Tidak' }}
-                                            </span>
+                                            <form action="{{ route('admin.services.toggleFavorite', $service) }}" method="POST" class="inline">
+                                                @csrf
+                                                @method('PATCH')
+                                                
+                                                @if ($service->is_favorite)
+                                                    <button type="submit" class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 hover:bg-green-200 transition" title="Klik untuk menonaktifkan">
+                                                        Favorit (Ya)
+                                                    </button>
+                                                @else
+                                                    <button type="submit" class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 hover:bg-gray-200 transition" title="Klik untuk mengaktifkan">
+                                                        Bukan (Tidak)
+                                                    </button>
+                                                @endif
+                                            </form>
                                         </td>
+                                        
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <a href="{{ route('admin.services.show', $service) }}" class="text-blue-600 hover:text-blue-900">Lihat</a>
-                                                <a href="{{ route('admin.services.edit', $service) }}" class="text-indigo-600 hover:text-indigo-900 ml-4">Edit</a>
+                                            <a href="{{ route('admin.services.show', $service) }}" class="text-blue-600 hover:text-blue-900">Lihat</a>
+                                            <a href="{{ route('admin.services.edit', $service) }}" class="text-indigo-600 hover:text-indigo-900 ml-4">Edit</a>
                                             <form action="{{ route('admin.services.destroy', $service) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus layanan ini?');">
                                                 @csrf
                                                 @method('DELETE')

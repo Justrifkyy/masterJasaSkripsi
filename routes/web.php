@@ -25,10 +25,8 @@ Route::get('/layanan', [PageController::class, 'listServices'])->name('frontend.
 // Rute Halaman Detail Layanan (Publik)
 Route::get('/layanan/{service}', [PageController::class, 'showService'])->name('frontend.services.show');
 
-// == RUTE HALAMAN STATIS BARU ==
-// Halaman About Us
+// Rute Halaman Statis (Publik)
 Route::get('/about', [PageController::class, 'about'])->name('frontend.about');
-// Halaman Cara Pesan
 Route::get('/how-to-order', [PageController::class, 'howToOrder'])->name('frontend.how-to-order');
 
 
@@ -38,15 +36,14 @@ Route::get('/how-to-order', [PageController::class, 'howToOrder'])->name('fronte
 |--------------------------------------------------------------------------
 */
 
-// Rute Dashboard bawaan Breeze (User yang baru login diarahkan ke sini)
+// Rute Dashboard bawaan Breeze (User yang baru login diarahkan ke Homepage)
 Route::get('/dashboard', function () {
-    // Kita arahkan saja ke Homepage agar tidak bingung
     return redirect()->route('home');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Rute yang hanya bisa diakses oleh user yang sudah login
 Route::middleware('auth')->group(function () {
-    // Rute Profile
+    // Rute Profile (yang sudah kita modifikasi jadi User Dashboard)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -71,22 +68,26 @@ Route::group([
 
     // Rute Dashboard Admin
     Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('dashboard'); // Nama rutenya: admin.dashboard
+        ->name('dashboard');
 
     // Rute CRUD Services
     Route::resource('services', ServiceController::class);
+
+    // Rute Toggle Favorit (yang ditambahkan)
+    Route::patch('services/{service}/toggle-favorite', [ServiceController::class, 'toggleFavorite'])
+        ->name('services.toggleFavorite');
 
     // Rute CRUD Testimonials
     Route::resource('testimonials', TestimonialController::class);
 
     // Rute Manajemen User (Semua kecuali create & store)
     Route::resource('users', UserController::class)->except([
-        'create', 'store'
+        'create',
+        'store'
     ]);
 
     // Rute CRUD Orders (Penuh)
     Route::resource('orders', OrderController::class);
-
 });
 
 

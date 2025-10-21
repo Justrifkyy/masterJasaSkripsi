@@ -31,7 +31,7 @@ class PemesananController extends Controller
 
         // AMBIL NOMOR WA ADMIN (Ganti dengan nomor Anda)
         // Sebaiknya simpan ini di file .env
-        $nomorWaAdmin = env('NOMOR_WA_ADMIN', '6281234567890'); // Ganti
+        $nomorWaAdmin = env('NOMOR_WA_ADMIN', '6289518804219'); // Ganti
 
         // 3. Encode pesan dan buat URL
         $urlWa = 'https://wa.me/' . $nomorWaAdmin . '?text=' . urlencode($pesan);

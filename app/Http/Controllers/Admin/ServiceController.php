@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Service;
+use Illuminate\Http\RedirectResponse;
 
 
 class ServiceController extends Controller
@@ -110,5 +111,30 @@ class ServiceController extends Controller
         // Ini adalah bagian yang penting:
         return redirect()->route('admin.services.index')
             ->with('success', 'Layanan berhasil dihapus.');
+    }
+
+    public function toggleFavorite(Service $service): RedirectResponse
+    {
+        $newStatus = !$service->is_favorite;
+
+        // PERATURAN: Cek limit 4 favorit (sesuai dokumen )
+        // Kita hanya perlu cek jika kita akan MENAMBAHKAN (mengubah ke true)
+        if ($newStatus == true) {
+            $favoriteCount = Service::where('is_favorite', true)->count();
+
+            if ($favoriteCount >= 4) {
+                // Gagal, karena sudah penuh 4
+                return redirect()->route('admin.services.index')
+                    ->with('error', 'Gagal! Anda hanya dapat memiliki maksimal 4 layanan favorit.');
+            }
+        }
+
+        // Jika lolos, update status
+        $service->is_favorite = $newStatus;
+        $service->save();
+
+        $message = $newStatus ? 'Layanan berhasil ditandai sebagai favorit.' : 'Layanan berhasil dihapus dari favorit.';
+
+        return redirect()->route('admin.services.index')->with('success', $message);
     }
 }
