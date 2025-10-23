@@ -1,0 +1,11 @@
+# Abaikan folder Git
+.git
+
+# Abaikan file environment (keamanan)
+.env
+
+# Abaikan folder dependensi Node (sangat besar!)
+node_modules/
+
+# INI YANG PALING PENTING: Abaikan symbolic link
+public/storage

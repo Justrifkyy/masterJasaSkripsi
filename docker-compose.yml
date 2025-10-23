@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # Layanan Aplikasi (PHP-FPM)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: masterjoki-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - /var/www/vendor
+    networks:
+      - masterjoki-network
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: db_masterjoki
+      DB_USERNAME: root
+      DB_PASSWORD: ${DB_ROOT_PASSWORD}
+
+  # Layanan Web Server (Nginx)
+  nginx:
+    image: nginx:alpine
+    container_name: masterjoki-nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - masterjoki-network
+    depends_on:
+      - app
+
+  # Layanan Database (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: masterjoki-db
+    restart: unless-stopped
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: db_masterjoki
+      MYSQL_ROOT_PASSWORD: root_password_super_aman # <-- Ganti password ini
+    volumes:
+      - masterjoki-db-data:/var/lib/mysql
+    networks:
+      - masterjoki-network
+
+networks:
+  masterjoki-network:
+    driver: bridge
+
+volumes:
+  masterjoki-db-data:
+    driver: local
