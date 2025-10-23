@@ -15,28 +15,47 @@ class PemesananController extends Controller
      */
     public function buatPesanan(Request $request, Service $service)
     {
+        $user = Auth::user(); // Ambil data user yang sedang login
+
         // 1. Buat pesanan di database
         $order = Order::create([
-            'user_id' => Auth::id(), // Ambil user yang sedang login
+            'user_id' => $user->id,
             'service_id' => $service->id,
             'harga_pesanan' => $service->harga, // Ambil harga default dari layanan
             'status' => 'wa_pending', // Status baru!
         ]);
 
-        // 2. Siapkan pesan WA
+        // =============================================
+        //        BAGIAN PESAN WA YANG DIPERBAIKI
+        // =============================================
+
+        // 2. Siapkan detail untuk pesan
         $namaLayanan = $service->judul;
-        $pesan = "Halo, saya ingin memesan layanan: *$namaLayanan*.\n\n" .
-            "Pesanan saya sudah tercatat di sistem dengan ID: *#{$order->id}*.\n\n" .
-            "Saya menunggu konfirmasi selanjutnya.";
+        $hargaLayanan = "Rp " . number_format($service->harga, 0, ',', '.');
+        $namaUser = $user->name;
+        $emailUser = $user->email;
+        $orderId = $order->id;
 
-        // AMBIL NOMOR WA ADMIN (Ganti dengan nomor Anda)
-        // Sebaiknya simpan ini di file .env
-        $nomorWaAdmin = env('NOMOR_WA_ADMIN', '6289518804219'); // Ganti
+        // 3. Susun pesan yang lebih terstruktur
+        $pesan  = "Halo Admin " . config('app.name') . " 👋\n\n";
+        $pesan .= "Saya ingin melakukan pemesanan layanan melalui website.\n\n";
+        $pesan .= "--- *DETAIL PESANAN* ---\n";
+        $pesan .= "*ID Pesanan:* `#{$orderId}`\n";
+        $pesan .= "*Layanan:* {$namaLayanan}\n";
+        $pesan .= "*Harga Awal:* {$hargaLayanan}\n\n";
+        $pesan .= "--- *DATA SAYA* ---\n";
+        $pesan .= "*Nama:* {$namaUser}\n";
+        $pesan .= "*Email:* {$emailUser}\n\n";
+        $pesan .= "Mohon segera ditindaklanjuti. Terima kasih! 🙏";
 
-        // 3. Encode pesan dan buat URL
+
+        // 4. Ambil nomor WA Admin dari file .env
+        $nomorWaAdmin = env('NOMOR_WA_ADMIN', '6285751925074'); // Nomor default jika di .env tidak ada
+
+        // 5. Encode pesan dan buat URL WhatsApp
         $urlWa = 'https://wa.me/' . $nomorWaAdmin . '?text=' . urlencode($pesan);
 
-        // 4. Redirect user ke WA
+        // 6. Redirect user ke URL WhatsApp
         return redirect()->away($urlWa);
     }
 }
