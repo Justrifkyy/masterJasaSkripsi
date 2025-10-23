@@ -1,19 +1,36 @@
-/.phpunit.cache
-/node_modules
-/public/build
-/public/hot
-/public/storage
-/storage/*.key
-/vendor
+# Abaikan folder dependensi (ini di-install ulang)
+/vendor/
+/node_modules/
+
+# Abaikan file Rahasia
+# INI YANG PALING PENTING!
 .env
-.env.backup
-.env.production
-.phpunit.result.cache
-Homestead.json
-Homestead.yaml
-auth.json
-npm-debug.log
-yarn-error.log
-/.fleet
-/.idea
-/.vscode
+
+# Abaikan file log Laravel
+/storage/logs/*.log
+/storage/framework/cache/
+/storage/framework/sessions/
+/storage/framework/views/
+
+# Abaikan aset yang sudah di-compile (ini dibuat ulang)
+/public/build/
+/public/hot
+
+# Abaikan file OS/IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Tambahkan file .gitignore
+git add .gitignore
+
+# Tambahkan file template .env
+git add .env.example
+
+# Tambahkan semua file konfigurasi Docker
+git add docker-compose.yml
+git add Dockerfile
+git add docker/
+
+# Tambahkan seeder yang baru kita buat
+git add database/seeders/

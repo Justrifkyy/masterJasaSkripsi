@@ -1,7 +1,6 @@
-version: '3.8'
+# Hapus 'version: 3.8' (sudah obsolete/usang)
 
 services:
-  # Layanan Aplikasi (PHP-FPM)
   app:
     build:
       context: .
@@ -20,24 +19,27 @@ services:
       DB_PORT: 3306
       DB_DATABASE: db_masterjoki
       DB_USERNAME: root
-      DB_PASSWORD: ${DB_ROOT_PASSWORD}
+      DB_PASSWORD: masterjasaskripsi2025
+    # TAMBAHKAN INI: 'app' akan menunggu 'db' sampai statusnya 'healthy'
+    depends_on:
+      db:
+        condition: service_healthy
 
-  # Layanan Web Server (Nginx)
   nginx:
     image: nginx:alpine
     container_name: masterjoki-nginx
     restart: unless-stopped
     ports:
-      - "8000:80"
+      - "8080:80"
     volumes:
       - .:/var/www
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     networks:
       - masterjoki-network
+    # 'nginx' hanya perlu 'app' berjalan, tidak perlu tunggu db
     depends_on:
       - app
 
-  # Layanan Database (MySQL)
   db:
     image: mysql:8.0
     container_name: masterjoki-db
@@ -46,11 +48,18 @@ services:
       - "3307:3306"
     environment:
       MYSQL_DATABASE: db_masterjoki
-      MYSQL_ROOT_PASSWORD: root_password_super_aman # <-- Ganti password ini
+      MYSQL_ROOT_PASSWORD: masterjasaskripsi2025
     volumes:
       - masterjoki-db-data:/var/lib/mysql
     networks:
       - masterjoki-network
+    # TAMBAHKAN INI: Docker akan mengecek status MySQL
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
 networks:
   masterjoki-network:
