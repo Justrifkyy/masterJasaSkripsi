@@ -1,4 +1,30 @@
 <x-app-layout>
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>@yield('title', 'Master Jasa Skripsi - Jasa Skripsi & Olah Data Terpercaya')</title>
+    
+    <meta name="description" content="@yield('description', 'Master Jasa Skripsi menyediakan bimbingan skripsi, olah data SPSS, cek Turnitin, dan parafrase dengan harga terjangkau dan bergaransi.')">
+
+    <link rel="canonical" href="{{ url()->current() }}" />
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="@yield('title', 'Master Jasa Skripsi - Jasa Skripsi & Olah Data Terpercaya')">
+    <meta property="og:description" content="@yield('description', 'Master Jasa Skripsi menyediakan bimbingan skripsi, olah data SPSS, cek Turnitin, dan parafrase.')">
+    <meta property="og:image" content="@yield('og_image', asset('images/og-image-default.jpg'))">
+    
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="@yield('title', 'Master Jasa Skripsi - Jasa Skripsi & Olah Data Terpercaya')">
+    <meta property="twitter:description" content="@yield('description', 'Master Jasa Skripsi menyediakan bimbingan skripsi, olah data SPSS, cek Turnitin, dan parafrase.')">
+    <meta property="twitter:image" content="@yield('og_image', asset('images/og-image-default.jpg'))">
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+
+
     <!-- Hero Section -->
     <div class="relative py-20 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 overflow-hidden">
         <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"40\" height=\"40\" viewBox=\"0 0 40 40\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.1\"%3E%3Cpath d=\"M0 0h40v40H0z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] dark:fill-gray-800"></div>

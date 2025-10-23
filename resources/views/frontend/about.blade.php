@@ -1,4 +1,11 @@
 <x-app-layout>
+
+    {{-- SEO Tags untuk Halaman Tentang Kami --}}
+@section('title', 'Tentang Kami - Master Jasa Skripsi')
+@section('description', 'Pelajari lebih lanjut tentang Master Jasa Skripsi, tim profesional kami, dan komitmen kami untuk membantu mahasiswa Indonesia lulus tepat waktu.')
+{{-- @section('og_image', asset('images/og-tentang.jpg')) --}} {{-- Opsional: gambar khusus --}}
+
+
     <!-- Hero Section -->
     <div class="relative dark:bg-gray-900 from-indigo-900 via-indigo-800 to-indigo-700 text-white py-24 md:py-36 overflow-hidden">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
