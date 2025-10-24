@@ -1,7 +1,4 @@
-<x-app-layout>
-    @section('title', $layanan->judul . ' - Master Jasa Skripsi')
-    @section('description', Str::limit(strip_tags($layanan->deskripsi), 155))
-    
+<x-app-layout> 
     <div class="py-20 bg-gray-50 dark:bg-gray-900">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
